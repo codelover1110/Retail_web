@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/App.css"],"names":[],"mappings":"AAAA,gBACE,UAAW,CACX,aACF,CAEA,cACE,gBACF","file":"main.d1599264.chunk.css","sourcesContent":[".main-container {\n  width: 100%;\n  margin: 20px 0 20px 0;\n}\n\n.select-wrape {\n  margin-left: 30px;\n}"]}
