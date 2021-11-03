@@ -1,13 +1,4 @@
-import React, { lazy, useEffect, useState } from 'react'
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CWidgetSimple,
-  CImg
-} from '@coreui/react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -23,6 +14,7 @@ const Home = () => {
     dispatch({type: 'set', darkMode: true})
     history.push('/signin')
   }
+  else if (user.is_superuser === 1) history.push('/users')
 
   return (
     <>

@@ -6,7 +6,6 @@ import {
   CHeaderNavItem,
   CHeaderNavLink,
   CImg,
-  CButton,
   CDropdown,
   CDropdownItem,
   CDropdownMenu,

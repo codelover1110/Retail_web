@@ -4,10 +4,7 @@ import {
     CModal,
     CModalBody,
     CButton,
-    CFormGroup,
-    CInputRadio,
-    CLabel,
-    CCol,
+    CSelect
   } from '@coreui/react'
 import TextField from '@material-ui/core/TextField';
 import {
@@ -55,29 +52,19 @@ const EditUser = () => {
 
   const handleClose = () => {
     dispatch({type: 'set', editUser: false})
+    dispatch({type: 'set', selectedUser: {}})
   };
-
-  const [selectedStatus, setSelectedStatus] = useState('Active')
-
-  const onChangeTransaction = (value) => {
-      if (selectedUser) {
-          setSelectedStatus(value);
-          selectedUser.status = value;
-      }
-  }
-
-  useEffect(() => {
-      if (selectedUser) {
-        setSelectedStatus(selectedUser.status)
-      }
-  }, [selectedUser]);
 
   const onSubmit = () => {
       if (selectedUser) {
-            userService.update(selectedUser).then(
+            userService.updateForAdmin({
+                ...selectedUser,
+                "is_active": activeState
+            }).then(
               result => {
-                  successNotification("Successfully updated", 3000);
-                  dispatch({type: 'set', editUser: false})
+                    successNotification("Successfully updated", 3000);
+                    dispatch({type: 'set', editUser: false})
+                    dispatch({type: 'set', selectedUser: {}})
               },
               err => {
                   console.log(err)
@@ -87,6 +74,13 @@ const EditUser = () => {
   }
 
   const [isSubmiting, setIsSubmiting] = useState(false);
+  const [activeState, setActiveState] = useState(0)
+
+  useEffect(() => {
+      if (selectedUser) {
+          setActiveState(selectedUser.is_active)
+      }
+  }, [selectedUser])
 
   return (
     <CModal 
@@ -109,6 +103,7 @@ const EditUser = () => {
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            onChange={(e) => selectedUser.first_name = e.target.value}
                             variant="filled"
                         />
                 </div>
@@ -125,6 +120,7 @@ const EditUser = () => {
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            onChange={(e) => selectedUser.last_name = e.target.value}
                             variant="filled"
                         />
                 </div>
@@ -141,6 +137,7 @@ const EditUser = () => {
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            onChange={(e) => selectedUser.username = e.target.value}
                             variant="filled"
                         />
                 </div>
@@ -157,13 +154,21 @@ const EditUser = () => {
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            onChange={(e) => selectedUser.email = e.target.value}
                             variant="filled"
                         />
                 </div>
             }
+
+            { selectedUser && 
+                <CSelect custom size="lg" className="p-1 mt-2 mb-2" name="selectLg" id="selectLg" value={activeState} onChange={(e) => setActiveState(e.target.value)}>
+                    <option value="0">Pending</option>
+                    <option value="1">Active</option>
+                </CSelect>                    
+            }
             
             <div className="d-flex mx-3 px-3">
-                <CButton block className="button-exchange p-1 pt-2" onClick={onSubmit} disabled={selectedStatus === 'Processing'}>
+                <CButton block className="button-exchange p-1 pt-2" onClick={onSubmit}>
                     <h3>Save</h3>
                 </CButton>
             </div>

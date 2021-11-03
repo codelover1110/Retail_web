@@ -5,10 +5,7 @@ import {
   TheContent,
   TheFooter,
   TheHeader,
-  TheSidebar
 } from './index'
-
-const AuthDialog = React.lazy(() => import('../views/auth/AuthDialog'));
 
 const TheLayout = () => {
   const darkMode = useSelector(state => state.darkMode)
@@ -27,7 +24,6 @@ const TheLayout = () => {
         </div>
         <TheFooter/>
       </div>
-      <AuthDialog />
     </div>
   )
 }

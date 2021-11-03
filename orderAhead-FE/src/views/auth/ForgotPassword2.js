@@ -13,7 +13,15 @@ import {
     makeStyles,
   } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
+import { InputAdornment } from '@material-ui/core';
 
+const useStyles = makeStyles(() => ({
+  noBorder: {
+    border: "none",
+    boxShadow: `${alpha("#E3EFFE", 0.9)} 3px 3px 1px 1px`,
+    borderRadius: '50px'
+  },
+}));
 const useStylesReddit = makeStyles((theme) => ({
   root: {
     border: "1px solid lightgray",
@@ -48,6 +56,8 @@ function RedditTextField(props) {
 
 const Signup = () => {
   const dispatch = useDispatch()
+  const classes = useStyles();
+
   const selectedUser = useSelector(state => state.selectedUser);
   const history = useHistory()
 
@@ -84,9 +94,13 @@ const Signup = () => {
     })
         .then(
             user => { 
-                successNotification("Your password is changed successfully.", 3000);
-                onClose()
-                dispatch({type: 'set', openSignin: true})
+                if (user.status) {
+                  successNotification("Your password is changed successfully.", 3000);
+                  onClose()
+                }
+                else {
+                  warningNotification(user.message, 3000);
+                }
             },
             error => {
                 warningNotification(error, 3000);
@@ -95,11 +109,9 @@ const Signup = () => {
   }
 
   const onClose = () => {
-    dispatch({type: 'set', openSignup: false})
     dispatch({type: 'set', openEmailVerification: false})
     dispatch({type: 'set', forgotPassword1: false})
     dispatch({type: 'set', forgotPassword2: false})
-    dispatch({type: 'set', openSignin: false})
   }
 
 //   useEffect(() => {
@@ -114,7 +126,7 @@ const Signup = () => {
   return (
     <>
       <CWidgetSimple className="signin-widget text-left p-3 pt-0 pb-0 mx-auto">
-        <div className="float-right" style={{marginRight: '-20px'}}>
+        <div className="float-right" style={{marginRight: '-10px'}}>
           <CImg src={'img/icons8-close.png'} style={{cursor: 'pointer'}} onClick={() => onClose()}></CImg>
         </div>
         <h2 className="text-left signin-header-title">Forgot password?</h2>
@@ -123,7 +135,7 @@ const Signup = () => {
                 {
                     <RedditTextField
                         id="verify-code"
-                        label="Confirmation code"
+                        label=""
                         placeholder="Type the confirmation code."
                         value={confirmationCode}
                         helperText={errMessageForConfirmationCode && errMessageForConfirmationCode !== '' ? errMessageForConfirmationCode : '' }
@@ -132,9 +144,21 @@ const Signup = () => {
                             shrink: true,
                         }}
                         fullWidth
-                        variant="filled"
+                        InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          <CImg src={'../img/email.png'} style={{width: '27px'}} />
+                                        </InputAdornment>
+                                      ),
+                                      classes:{notchedOutline:classes.noBorder}
+                                    }}
+                        variant="outlined"
                         onKeyDown={handleEnterKeyDown}
                         onBlur={() => {
+                          if (!confirmationCode || confirmationCode === '') setErrMessageForConfirmationCode('Full name is required')
+                          else setErrMessageForConfirmationCode('')
+                        }}
+                        onKeyUp={() => {
                           if (!confirmationCode || confirmationCode === '') setErrMessageForConfirmationCode('Full name is required')
                           else setErrMessageForConfirmationCode('')
                         }}
@@ -148,7 +172,7 @@ const Signup = () => {
                 {
                     <RedditTextField
                         id="password"
-                        label="Password"
+                        label=""
                         placeholder="Type your password"
                         value={password}
                         InputLabelProps={{
@@ -156,11 +180,25 @@ const Signup = () => {
                         }}
                         type="password"
                         fullWidth
-                        variant="filled"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <CImg src={'../img/password.png'} style={{width: '27px'}} />
+                            </InputAdornment>
+                          ),
+                          classes:{notchedOutline:classes.noBorder}
+                        }}
+                        variant="outlined"
                         onKeyDown={handleEnterKeyDown}
                         helperText={errMessageForNewPassword && errMessageForNewPassword !== '' ? errMessageForNewPassword : '' }
                         error={errMessageForNewPassword && errMessageForNewPassword !== ''}
                         onBlur={() => {
+                          if (!password || password === '') setErrMessageForNewPassword('Password is required')
+                          else if (password.length < 6) setErrMessageForNewPassword('Password hat to be at least 6 characters!')
+                          else if (!password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/)) setErrMessageForNewPassword('Password must contain: numbers, uppercase and lowercase letters');
+                          else setErrMessageForNewPassword('')
+                        }}
+                        onKeyUp={() => {
                           if (!password || password === '') setErrMessageForNewPassword('Password is required')
                           else if (password.length < 6) setErrMessageForNewPassword('Password hat to be at least 6 characters!')
                           else if (!password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/)) setErrMessageForNewPassword('Password must contain: numbers, uppercase and lowercase letters');
@@ -175,7 +213,7 @@ const Signup = () => {
                 {
                     <RedditTextField
                         id="confirm-password"
-                        label="Repeat new password"
+                        label=""
                         placeholder="Repeat new password"
                         value={confirmPassword}
                         InputLabelProps={{
@@ -183,11 +221,24 @@ const Signup = () => {
                         }}
                         type="password"
                         fullWidth
-                        variant="filled"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <CImg src={'../img/password.png'} style={{width: '27px'}} />
+                            </InputAdornment>
+                          ),
+                          classes:{notchedOutline:classes.noBorder}
+                        }}
+                        variant="outlined"
                         onKeyDown={handleEnterKeyDown}
                         helperText={errMessageForConfirmPassword && errMessageForConfirmPassword !== '' ? errMessageForConfirmPassword : '' }
                         error={errMessageForConfirmPassword && errMessageForConfirmPassword !== ''}
                         onBlur={() => {
+                          if (!confirmPassword || confirmPassword === '') setErrMessageForConfirmPassword('Password confirmation is required!')
+                          else if (confirmPassword !== password) setErrMessageForConfirmPassword('Passwords must match')
+                          else setErrMessageForConfirmPassword('')
+                        }}
+                        onKeyUp={() => {
                           if (!confirmPassword || confirmPassword === '') setErrMessageForConfirmPassword('Password confirmation is required!')
                           else if (confirmPassword !== password) setErrMessageForConfirmPassword('Passwords must match')
                           else setErrMessageForConfirmPassword('')
@@ -197,16 +248,10 @@ const Signup = () => {
                 }
             </div>
 
-            <div className="d-flex mt-1">
-                <CButton block className="button-exchange p-2" onClick={() => onSubmit()} disabled={submitButtonDisabled}>
-                    <h3>Reset your password</h3>
+            <div className="m-auto text-center">
+                <CButton className="signin-button mt-3 btn-pill" size="lg" color="info" onClick={() => onSubmit()} disabled={submitButtonDisabled}>
+                  Reset your password
                 </CButton>
-            </div>
-            <div className="mt-1 text-center">
-              <h5 className="signin-header-desc">Already have an account? <span className="span-underline" onClick={() => {
-                onClose()
-                dispatch({type: 'set', openSignin: true})
-                }}>Sign in</span></h5>
             </div>
       </CWidgetSimple>
     </>

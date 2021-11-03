@@ -83,7 +83,7 @@ const PersionalInfoSetting = () => {
           userService.update(newUser).then(
               result => {
                   console.log(result)
-                  dispatch({type: 'set', user: result})
+                  dispatch({type: 'set', user: newUser})
                   successNotification("Updated your profile successfully", 3000)
                   setIsSubmitting(false)
               },

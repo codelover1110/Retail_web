@@ -147,12 +147,12 @@
 }
 
 .button-exchange {
-  background-color: red;
+  background-color: rgb(152, 2, 172);
   color: white;
   margin-top: 15px;
   padding: 14px 16px;
-  font-size: 16px;
-  line-height: 21px;
+  font-size: 14px;
+  line-height: 20px;
 }
 .button-exchange:hover {
     background-color: rgba(255, 0, 0, 0.63);
@@ -397,52 +397,48 @@
 * **************** Sign In ***************
 */
 .signin-widget {
+  min-width: 450px;
   margin: 0;
   background-color: white !important;
   color: #181924;
-  padding: 3px 20px !important;
-
-  input {
-    color: #181924 !important;
-    border-color: #3f42529f !important;
-  }
-  button {
-    background-color: red !important;
-  }
+  padding: 3px 15px !important;
+  box-shadow: 20px 20px 60px #1b1d1f;
 }
 
+.bg-signin {
+  background-image: radial-gradient( #4404ac 5%, #6219D8 5%, #9633FF 90%)
+}
 .signin-header-title {
   font-size: 26px;
   line-height: 32px;
-  margin-top: 30px;
   color: #404b51;
   font-weight: 600;
+  font-family: 'PoppinsR' !important;
 }
 .signin-header-desc {
-  color: #7d7e7e;
+  color: #29d4fa !important;
   margin-top: 12px;
   margin-bottom: 20px;
   font-weight: 400;
+  font-family: 'PoppinsR' !important;
 }
 .span-underline {
-  text-decoration: underline;
+  // text-decoration: underline;
   cursor: pointer;
 }
 .span-underline:hover {
-  color: #494949;
+  color: #5ADEFD;
 }
 .signin-button {
-  width: 100%;
-  background-color: red;
-  color: white;
-  border: none;
-  font-size: 20px;
+  background-color: #9633FF; // radial-gradient( #4404ac 5%, #6219D8 5%, #9633FF 90%);
+  font-size: 22px;
+  font-family: 'PoppinsR' !important;
+  padding: 10px 20px;
+  min-width: 200px;
 }
 
 .signin-button:hover {
-  background-color: white;
-  color: red;
-  border: 1px solid red;
+  background-color: radial-gradient( #3c0f85 5%, #622db8 5%, #923feb 90%)
 }
 
 .copy-button {

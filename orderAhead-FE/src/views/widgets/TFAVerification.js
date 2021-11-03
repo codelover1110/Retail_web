@@ -10,29 +10,29 @@ import { userService } from '../../controllers/_services';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
 
 const TFAVerification = () => {
- const dispatch = useDispatch()
- 
- const [isSubmitting, setIsSubmitting] = useState(false)
- const [is2FA, setIs2FA] = useState()
+    const dispatch = useDispatch()
+    
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [mfa, setMfa] = useState()
 
- const user = useSelector(state => state.user)
+    const user = useSelector(state => state.user)
  
- useEffect(() => {
-    if (localStorage.getItem('userId') && user) {
-        setIs2FA(user.is2FA)
-    }
- }, [user]);
+    useEffect(() => {
+        if (localStorage.getItem('userId') && user) {
+            setMfa(user.mfa)
+        }
+    }, [user]);
   
-  const onSubmit = () => {
+  const onSubmit = (info) => {
       if (user) {
           const newUser = {
               ...user,
-              "is2FA": !is2FA
+              "mfa": info
           }
           setIsSubmitting(true)
-          userService.update(newUser).then(
+          userService.updateMfa(newUser).then(
               result => {
-                  dispatch({type: 'set', user: result})
+                  dispatch({type: 'set', user: newUser})
                   successNotification("Updated your profile successfully", 3000)
                   setIsSubmitting(false)
               },
@@ -51,15 +51,41 @@ const TFAVerification = () => {
 
             <div className="d-flex mt-3">
                 <h5>
-                    With 2-step verification, you protect your account with both your password and your phone. To log in into account you will require a separate code that you will get in the Google Authenticator app
+                    With 2-step verification, you protect your account with both your email and your phone.
                 </h5>
             </div>
             
-            <div className="d-flex mt-0 float-right">
-                <CButton className="button-exchange" onClick={() => onSubmit()} disabled={isSubmitting}>
-                    {is2FA ? 'Disable' : 'Enable'}
+            <div className="d-flex mt-3 float-right">
+                <CButton className="button-exchange" onClick={() => { 
+                        if (mfa === 'email' )
+                        {
+                            setMfa('phone');
+                            onSubmit('phone');
+                        }
+                        else {
+                            setMfa('email');
+                            onSubmit('email');
+                        }
+                     }} disabled={isSubmitting}>
+                    {mfa === 'email' ? 'Disable' : 'Enable'} for MFA Email
                 </CButton>
+                { user && user.phone_number && 
+                    <CButton className="button-exchange" onClick={() => { 
+                        if (mfa === 'email' )
+                        {
+                            setMfa('phone');
+                            onSubmit('phone');
+                        }
+                        else {
+                            setMfa('email');
+                            onSubmit('email');
+                        }    
+                    }} disabled={isSubmitting} style={{marginLeft: '30px'}}>
+                        {mfa === 'phone' ? 'Disable' : 'Enable'} for MFA Phone
+                    </CButton>
+                }
             </div>
+
         </CCardBody>
     </CCard>
 

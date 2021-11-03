@@ -1,4 +1,4 @@
-import React, { lazy, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   CCard,
   CButton,
@@ -11,19 +11,11 @@ import {
 } from '@coreui/react'
 import TextField from '@material-ui/core/TextField';
 import {
-    alpha,
     makeStyles,
   } from '@material-ui/core/styles';
-// import {
-//     MuiPickersUtilsProvider,
-//     KeyboardTimePicker,
-//     KeyboardDatePicker,
-//   } from '@material-ui/pickers';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { format } from 'date-fns';
 import { userService } from '../../controllers/_services';
-import InputMask from 'react-input-mask';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
 
 const useStylesReddit = makeStyles((theme) => ({

@@ -63,18 +63,20 @@ const EmailVerify = () => {
             userService.login(selectedUser.email, selectedUser.password, false)
                 .then(
                     result => {
-                        dispatch({type: 'set', openSignin: false})
-                        dispatch({type: 'set', openSignup: false})
-                        dispatch({type: 'set', openEmailVerification: false})
-                        dispatch({type: 'set', isLogin: true})
-                        setSubmitting(false)
-                        if (result.role) {
-                          successNotification('Welcome Adminstrator', 3000)
-                          dispatch({type: 'set', isAdmin: true})
-                          history.push('admin')
+                        if (result.status) {
+                          dispatch({type: 'set', openEmailVerification: false})
+                          dispatch({type: 'set', isLogin: true})
+                          setSubmitting(false)
+                          if (result.is_superuser === 1) {
+                            successNotification('Welcome Adminstrator', 3000)
+                            dispatch({type: 'set', isAdmin: true})
+                            history.push('users')
+                          } else {
+                            successNotification('Welcome to Orderahead', 3000)
+                            history.push('home')
+                          }
                         } else {
-                          successNotification('Welcome to Unicash', 3000)
-                          history.push('dashboard')
+                          warningNotification('Failed', 3000)
                         }
                     },
                     error => {
@@ -94,7 +96,7 @@ const EmailVerify = () => {
   return (
     <>
       <CWidgetSimple className="signin-widget text-left p-3 pt-0 pb-0 mx-auto">
-        <h3 className="text-center mb-2">Email Verification</h3>
+        <h3 className="text-center mb-2" style={{fontWeight: '400', fontSize: '24px'}}>Email Verification</h3>
         <Formik
             initialValues={initialValues}
             validate={validate(validationSchema)}
@@ -119,7 +121,7 @@ const EmailVerify = () => {
                   <CCol>
                     <CForm onSubmit={handleSubmit} noValidate name='loginForm' className="text-left">
                       <CFormGroup>
-                            <CLabel htmlFor="verifyCode">Enter the code.</CLabel>
+                            <CLabel htmlFor="verifyCode" style={{fontSize: '15px'}}>Enter the code.</CLabel>
                             <CInput type="password"
                                     name="verifyCode"
                                     id="verifyCode"
@@ -135,7 +137,9 @@ const EmailVerify = () => {
                             <CInvalidFeedback>{errors.verifyCode}</CInvalidFeedback>
                       </CFormGroup>
                       <CFormGroup>
-                        <CButton type="submit" color="primary" className="signin-button mt-3 mb-0" disabled={isSubmitting || !isValid}>{isSubmitting ? 'Wait...' : 'Confirm'}</CButton>
+                        <CButton block type="submit" className="m-auto mt-3 btn-pill" size="lg" style={{
+                          fontSize: '20px'
+                        }} color="info" disabled={isSubmitting || !isValid}>{isSubmitting ? 'Wait...' : 'Confirm'}</CButton>
                       </CFormGroup>
                     </CForm>
                   </CCol>
