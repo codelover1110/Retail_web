@@ -1,6 +1,7 @@
 import sqlite3
 import os
 import common
+from models.user import User
 
 db_name = os.getenv('DB_NAME', 'order.db')
 
@@ -35,8 +36,25 @@ def saveUserByUsernameAndEmailAndPassword(userName, email, password, level, role
     conn.commit()
 
 
+def addCustomer(customer_data):
+    print('++addCustomer+++++')
+    # Save the data in db
+    db_path = os.path.join('db', db_name)
+    conn = sqlite3.connect(db_path)
+
+    column_names = ','.join(customer_data.keys())
+    column_values = (', '.join('"' + str(item) + '"' for item in customer_data.values()))
+
+    query = f'INSERT INTO users ({column_names}) \
+                  VALUES ({column_values});'
+
+    cur = conn.cursor()
+    cur.execute(query)
+    conn.commit()
+
+
 def getUserById(id):
-    query = 'SELECT id, first_name, password, last_name, is_active, is_superuser, role, email, phone_number, username, mfa FROM users WHERE'
+    query = 'SELECT id, first_name, password, last_name, is_active, is_superuser, role, email, phone_number, username, mfa, fullname, med_id, birth_date FROM users WHERE'
     to_filter = []
 
     if id:
@@ -113,3 +131,14 @@ def deleteAccount(user_id):
     cur = conn.cursor()
     cur.execute("delete from users where id=?", (user_id,))
     conn.commit()
+
+
+def get_last_purchases_by_date(user_id):
+    print('+++++get_last_purchases_by_date++++++++++', user_id)
+    result = getUserById(user_id)
+    if result['role'] != 'Customer' or result['med_id'] == None:
+        print('This user is not a customer or Medical ID is not exist.', result['med_id'])
+        return []
+
+    user = User(result['med_id'])
+    return user.get_last_purchases_by_date()

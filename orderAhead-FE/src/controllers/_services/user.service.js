@@ -1,6 +1,8 @@
 import { authHeader } from '../_helpers';
+import { useConfig } from "../../config";
 
-const serverURL = 'http://localhost:5000';
+const config = useConfig()
+const serverURL = config.serverUrl
 
 export const userService = {
     login,
@@ -20,7 +22,9 @@ export const userService = {
     createLinkForSignup,
     getAllLinks,
     sendLink,
-    confirmCodeBeforeSignup
+    confirmCodeBeforeSignup,
+
+    getLastPurchasesByDate,
 };
 
 function login(email, password, confirm) {
@@ -216,4 +220,19 @@ function handleResponse(response) {
 
         return data;
     });
+}
+
+
+/*
+* Get last purchases by date
+*/
+function getLastPurchasesByDate(userId) {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    return fetch(`${serverURL}/lastPurchases/${userId}`, requestOptions).then(handleResponse);
 }

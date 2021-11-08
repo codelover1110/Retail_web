@@ -21,11 +21,10 @@ const TheAside = () => {
   const show = useSelector(state => state.asideShow)
   const dispatch = useDispatch()
   const setState = (state) => dispatch({type: 'set', asideShow: state})
-  
+
   return (
     <CSidebar
       aside
-      colorScheme='light'
       size='lg'
       overlaid
       show={show}
@@ -56,7 +55,7 @@ const TheAside = () => {
           <CTabPane>
             <CListGroup accent>
               <CListGroupItem
-                accent="secondary" 
+                accent="secondary"
                 className="bg-light text-center font-weight-bold text-muted text-uppercase c-small"
               >
                   Today
@@ -86,8 +85,8 @@ const TheAside = () => {
                 <small className="text-muted"><CIcon name="cib-skype" />  On-line</small>
               </CListGroupItem>
               <hr className="transparent mx-3 my-0" />
-              <CListGroupItem 
-                color="secondary" 
+              <CListGroupItem
+                color="secondary"
                 className="bg-light text-center font-weight-bold text-muted text-uppercase c-small"
               >
                   Tomorrow

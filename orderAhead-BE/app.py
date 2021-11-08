@@ -17,18 +17,19 @@ from flask_mail import Mail, Message
 import smtplib
 from smtp_client import send_email
 from smtp_server import SMTPServer
+from models.datatable_factory import DatatableFactory
 
 LOCAL = True
 # Init app
 app = Flask(__name__)
 
 mail_settings = {
-    "MAIL_SERVER": 'smtp.gmail.com',
-    "MAIL_PORT": 465,
-    "MAIL_USE_TLS": False,
-    "MAIL_USE_SSL": True,
-    "MAIL_USERNAME": 'bigmlpiter@gmail.com',
-    "MAIL_PASSWORD": 'lwkxryjyflksuwni'
+    "MAIL_SERVER": os.getenv('MAIL_SERVER', 'smtp.gmail.com'),
+    "MAIL_PORT": os.getenv('MAIL_PORT', 465),
+    "MAIL_USE_TLS": os.getenv('MAIL_USE_TLS', False),
+    "MAIL_USE_SSL": os.getenv('MAIL_USE_SSL', True),
+    "MAIL_USERNAME": os.getenv('MAIL_USERNAME', 'bigmlpiter@gmail.com'),
+    "MAIL_PASSWORD": os.getenv('MAIL_PASSWORD', 'lwkxryjyflksuwni'),
 }
 
 app.config.update(mail_settings)
@@ -99,6 +100,7 @@ def logIn():
                     if result['mfa'] == 'email':
                         msg = Message('Welcome to Order Ahead', sender=SENDER_EMAIL, recipients=email)
                         msg.body = "Verification code:\n {}".format(verif_code)
+                        print(msg.body)
                         if not LOCAL:
                             mail.send(msg)
 
@@ -199,7 +201,25 @@ def register():
         )
         return response
 
-    user_controller.saveUserByUsernameAndEmailAndPassword(username, email, password, role_info['level'], role_info['role'])
+    if role_info['role'] == 'Customer':
+        fullname = content.get("fullname")
+        medid = content.get("medid")
+        birthdate = content.get("birthdate")
+
+        customer_data = {
+            'username': username,
+            'email': email,
+            'password': common.generate_hash(password),
+            'is_superuser': role_info['level'],
+            'role': role_info['role'],
+            'fullname': fullname,
+            'med_id': medid,
+            'birth_date': birthdate,
+        }
+
+        user_controller.addCustomer(customer_data)
+    else:
+        user_controller.saveUserByUsernameAndEmailAndPassword(username, email, password, role_info['level'], role_info['role'])
 
     response = app.response_class(
         response=json.dumps({"status": True, "message": "successfully registered"}),
@@ -635,6 +655,36 @@ def confirmCodeBeforeSignup():
         )
         return response
 
+@app.route('/lastPurchases/<int:user_id>', methods=['GET', 'POST'])
+@cross_origin()
+def getLastPurchasesByDate(user_id):
+    purchases = user_controller.get_last_purchases_by_date(user_id)
+    response = app.response_class(
+        response=json.dumps({"status": True, "message": "successfully sent", "data": purchases}),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
+
+
+@app.route('/loadDatatable/<data_type>', methods=['GET'])
+@cross_origin()
+def loadDatatable(data_type):
+    factory = DatatableFactory()
+    instance = factory.create(data_type)
+
+    data = []
+    if instance:
+        data = instance.load_data()
+
+    response = app.response_class(
+        response=json.dumps({"status": True, "message": "successfully sent", "data": data}),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
+
+
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -644,4 +694,4 @@ def page_not_found(e):
 # A method that runs the application server.
 if __name__ == "__main__":
     # Threaded option to enable multiple instances for multiple user access support
-    app.run(debug=False, threaded=True, port=os.getenv('PORT'))
+    app.run(debug=True, threaded=True, port=os.getenv('PORT'))

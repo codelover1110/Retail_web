@@ -2,22 +2,37 @@ import React, { Suspense } from 'react'
 import {
   Redirect,
   Route,
-  Switch
+  Switch,
+  useLocation
 } from 'react-router-dom'
 import { CContainer, CFade } from '@coreui/react'
 
 // routes config
 import routes from '../routes'
-  
+import { useFullwidth } from '../contexts/ThemeContext'
+
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
   </div>
 )
 
-const TheContent = () => {
+
+const TheContent = (props) => {
+  const location = useLocation()
+  const sanitizeTitle = (value) => value.replace(/^\/|\/$/g, '').replace('/', '-')
+  const pageClass = sanitizeTitle(location.pathname)
+
+  let boxLayoutClass = ' main-padding'
+
+  let fullwidthClasses = routes.filter(route => route.fullwidth)
+
+  fullwidthClasses = fullwidthClasses.map((route, idx) => sanitizeTitle(route.path))
+  if (fullwidthClasses.includes(pageClass))
+    boxLayoutClass = ' fullwidth'
+
   return (
-    <main className="c-main main-padding">
+    <main className={'c-main route-'+pageClass+boxLayoutClass}>
       <CContainer fluid>
         <Suspense fallback={loading}>
           <Switch>

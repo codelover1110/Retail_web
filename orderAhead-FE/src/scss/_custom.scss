@@ -2,14 +2,14 @@
 * Home
 */
 .main-padding {
-  max-width: 1168px;
+  max-width: 1210px;
   padding: 121px 0 50px;
   width: 100%;
   margin: 0 auto;
   font-family: 'PoppinsM' !important;
   line-height: 1.15;
 
-  @media (max-width: 1168px) {
+  @media (max-width: 1210px) {
     padding: 90px 15px 50px;
   }
 }
@@ -25,7 +25,7 @@
   background-color: #181924 !important;
   height: 72px !important;
   font-weight: 20px !important;
-  @media (min-width: 1168px) {
+  @media (min-width: 1210px) {
     padding: 1px auto;
   }
   .header-border {
@@ -34,7 +34,7 @@
     width: 100%;
     margin: 0 auto;
     padding: 1px calc(50% - 614px) !important;
-    @media (min-width: 1168px) {
+    @media (min-width: 1210px) {
       padding: 1px auto;
     }
   }
@@ -49,7 +49,7 @@
   border: none;
   font-family: 'PoppinsM' !important;
   font-size: 14px;
-  @media (min-width: 1168px) {
+  @media (min-width: 1210px) {
     padding: 1px 30px;
   }
   @media (min-width: 768px) {
@@ -65,7 +65,7 @@
   border: none;
   font-family: 'PoppinsM' !important;
   font-size: 14px;
-  @media (min-width: 1168px) {
+  @media (min-width: 1210px) {
     padding: 1px auto;
   }
   // @media (min-width: 768px) {
@@ -580,4 +580,48 @@
 
 .transaction-date-label {
   font-size: 22px;
+}
+
+.c-header .c-header-nav .c-header-nav-link,
+.c-header .c-header-nav .c-header-nav-btn {
+  color: white;
+  &:hover {
+    color: white;
+  }
+}
+.c-wrapper {
+  color: #000;
+}
+
+.fullwidth {
+  max-width: 100%;
+  padding: 121px 20px 50px;
+  width: 100%;
+  margin: 0 auto;
+  font-family: 'PoppinsM' !important;
+  line-height: 1.15;
+}
+
+.react-datepicker-wrapper {
+  .react-datepicker__input-container {
+    input {
+      border: none;
+      width: 100%;
+      height: 56px;
+      &:focus {
+        border: none;
+        outline: none;
+      }
+    }
+  }
+
+  border: 1px solid lightgray;
+  overflow: hidden;
+  background-color: #fcfcfb;
+  font-weight: 400;
+  line-height: 18px;
+  font-size: 18px;
+  height: 55px;
+  color: #000;
+
 }

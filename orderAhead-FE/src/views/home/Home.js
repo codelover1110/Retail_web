@@ -1,6 +1,9 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import PurchaseByDates from '../purchases/Main'
+
+import { useFullwidthUpdate } from '../../contexts/ThemeContext';
 
 const Home = () => {
   const dispatch = useDispatch()
@@ -16,9 +19,13 @@ const Home = () => {
   }
   else if (user.is_superuser === 1) history.push('/users')
 
+
+  const setFullwidth = useFullwidthUpdate()
+  // setFullwidth(true)
+
   return (
     <>
-      <h2>Home</h2>
+      <PurchaseByDates />
     </>
   )
 }

@@ -30,7 +30,7 @@ const TheHeader = () => {
   const user = useSelector(state => state.user)
 
   const [toggle, setToggle] = useState(false);
-  
+
   useEffect(() => {
     if (localUser) {
       userService.getById(parseInt(localUser))
@@ -72,8 +72,8 @@ const TheHeader = () => {
 
   return (
     <>
-    <CHeader colorScheme="dark" className="header">
-  
+    <CHeader colorscheme="dark" className="header">
+
       <CHeaderNav >
         <CHeaderNavItem >
           <CHeaderNavLink onClick={onClickLogo}>
@@ -83,6 +83,17 @@ const TheHeader = () => {
       </CHeaderNav>
 
       <CHeaderNav className="mr-auto">
+        <CDropdown variant="btn-group">
+            <CDropdownToggle className="m-0 pt-0 p-0 dropdown-toggle-exchange" color="success" caret={false}>Dashboard
+              <CImg src={'img/icons8-white-expand-arrow-24.png'} alt="Search" height={24}></CImg>
+            </CDropdownToggle>
+            <CDropdownMenu className="pt-1 dropdown-toggle-menu" placement="bottom-end">
+              <CDropdownItem className={isLogin && isAdmin ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('dashboard-1')}>Dashboard 1</CDropdownItem>
+              <CDropdownItem className={isLogin && isAdmin ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('dashboard-2')}>Dashboard 2</CDropdownItem>
+              <CDropdownItem className={isLogin && isAdmin ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('dashboard-3')}>Dashboard 3</CDropdownItem>
+              <CDropdownItem className={isLogin && isAdmin ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('dashboard-4')}>Dashboard 4</CDropdownItem>
+            </CDropdownMenu>
+        </CDropdown>
         <CHeaderNavItem className={isLogin && isAdmin ? 'px-3 d-md-down-none' : 'd-none'}>
           <CHeaderNavLink to="/users" className={currPath === '/users' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>User Manage</CHeaderNavLink>
         </CHeaderNavItem>
@@ -94,7 +105,7 @@ const TheHeader = () => {
         </CHeaderNavItem>
       </CHeaderNav>
 
-      <CHeaderNav className="px-3">
+      <CHeaderNav  className="px-3">
         {/* <CToggler
           inHeader
           className="ml-3 d-md-down-none"
@@ -108,13 +119,13 @@ const TheHeader = () => {
         <TheHeaderDropdownTasks/>
         <TheHeaderDropdownMssg/>
         <TheHeaderDropdown/> */}
-        
-        <CDropdown variant="btn-group" className={isLogin ? 'm-0 pt-0' : 'd-none'} toggle={toggle}
+
+        <CDropdown variant="btn-group" className={isLogin ? 'm-0 pt-0' : 'd-none'} toggle={toggle.toString()}
           onFocus={() => setToggle(!toggle)}
           onBlur={() => setToggle(!toggle)}>
             <CDropdownToggle className="m-0 pt-0 p-0 dropdown-toggle-exchange" color="success" caret={false}>
-                {fullName} 
-                { !toggle ? 
+                {fullName}
+                { !toggle ?
                     <CImg src={'img/icons8-white-expand-arrow-24.png'} alt="Search" height={24}></CImg>
                 :
                     <CImg src={'img/icons8-white-collapse-arrow-24.png'} alt="Search" height={24}></CImg>

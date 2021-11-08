@@ -19,6 +19,10 @@ import {
   } from '@material-ui/core/styles';
 import { useHistory, useParams } from 'react-router-dom';
 import { InputAdornment } from '@material-ui/core';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+
 
 const useStyles = makeStyles(() => ({
   noBorder: {
@@ -80,9 +84,12 @@ const Signup = () => {
       "username": username,
       "email": email,
       "password": password,
+      "fullname": fullname,
+      "medid": medid,
+      "birthdate": birthdate,
     })
     .then(
-        user => { 
+        user => {
           if (user && user.status) {
             successNotification(user.message, 3000);
             // dispatch({type: 'set', openEmailVerification: false})
@@ -104,6 +111,9 @@ const Signup = () => {
   const [firstName, setFirstName] = useState()
   const [lastName, setLastName] = useState()
   const [username, setUsername] = useState()
+  const [fullname, setFullname] = useState()
+  const [medid, setMedId] = useState()
+  const [birthdate, setBirthDate] = useState()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const [confirmPassword, setConfirmPassword] = useState()
@@ -115,11 +125,14 @@ const Signup = () => {
   const [errMessageForEmail, setErrMessageForEmail] = useState('')
   const [errMessageForNewPassword, setErrMessageForNewPassword] = useState('')
   const [errMessageForConfirmPassword, setErrMessageForConfirmPassword] = useState('')
+  const [errMessageForFullname, setErrMessageForFullname] = useState('')
+  const [errMessageForMedId, setErrMessageForMedId] = useState('')
+  const [errMessageForBirthDate, setErrMessageForBirthDate] = useState('')
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true)
   const [selectedRole, setSelectedRole] = useState('')
 
   useEffect(() => {
-    if (username !== '' && email !== '' && password !== '' && errMessageForUsername === '' && errMessageForEmail === '' && errMessageForNewPassword === '' && 
+    if (username !== '' && email !== '' && password !== '' && errMessageForUsername === '' && errMessageForEmail === '' && errMessageForNewPassword === '' &&
         errMessageForConfirmPassword === '' && password === confirmPassword) {
       setSubmitButtonDisabled(false);
     } else {
@@ -159,6 +172,7 @@ const Signup = () => {
                         </div>
                     </h5> */}
 
+                        {/* Username */}
                         <div className="d-flex mt-3">
                             {
                                 <RedditTextField
@@ -196,6 +210,46 @@ const Signup = () => {
                             }
                         </div>
 
+                        {/* Fullname */}
+                        {
+                          selectedRole == 'Customer' &&
+                          <div className="d-flex mt-3">
+                                  <RedditTextField
+                                      id="fullname"
+                                      label=""
+                                      placeholder="Fullname"
+                                      value={fullname}
+                                      helperText={errMessageForFullname && errMessageForFullname !== '' ? errMessageForFullname : '' }
+                                      error={errMessageForFullname && errMessageForFullname !== ''}
+                                      InputLabelProps={{
+                                          shrink: true,
+                                      }}
+                                      onKeyDown={handleEnterKeyDown}
+                                      fullWidth
+                                      InputProps={{
+                                        startAdornment: (
+                                          <InputAdornment position="start">
+                                            <CImg src={'../img/user.png'} style={{width: '27px'}} />
+                                          </InputAdornment>
+                                        ),
+                                        classes:{notchedOutline:classes.noBorder}
+                                      }}
+                                      variant="outlined"
+                                      onBlur={() => {
+                                        if (!fullname || fullname === '') setErrMessageForFullname('Fullname is required')
+                                        else setErrMessageForFullname('')
+                                      }}
+                                      onKeyUp={() => {
+                                        if (!fullname || fullname === '') setErrMessageForFullname('Fullname is required')
+                                        else setErrMessageForFullname('')
+                                      }}
+                                      onChange={(e) => {
+                                        setFullname(e.target.value); }}
+                                  />
+                          </div>
+                        }
+
+                        {/* E-mail */}
                         <div className="d-flex mt-3">
                             {
                                 <RedditTextField
@@ -237,6 +291,7 @@ const Signup = () => {
                             }
                         </div>
 
+                        {/* Password */}
                         <div className="d-flex mt-3">
                             {
                                 <RedditTextField
@@ -278,6 +333,7 @@ const Signup = () => {
                             }
                         </div>
 
+                        {/* Confirm password */}
                         <div className="d-flex mt-3">
                             {
                                 <RedditTextField
@@ -317,6 +373,112 @@ const Signup = () => {
                             }
                         </div>
 
+                        {/* Med ID */}
+                        {
+                          selectedRole == 'Customer' &&
+                          (
+                            <>
+                              <div className="d-flex mt-3">
+                                  <RedditTextField
+                                      id="medid"
+                                      label=""
+                                      placeholder="MedId"
+                                      value={medid}
+                                      helperText={errMessageForMedId && errMessageForMedId !== '' ? errMessageForMedId : '' }
+                                      error={errMessageForMedId && errMessageForMedId !== ''}
+                                      InputLabelProps={{
+                                          shrink: true,
+                                      }}
+                                      onKeyDown={handleEnterKeyDown}
+                                      fullWidth
+                                      InputProps={{
+                                        startAdornment: (
+                                          <InputAdornment position="start">
+                                            <CImg src={'../img/user.png'} style={{width: '27px'}} />
+                                          </InputAdornment>
+                                        ),
+                                        classes:{notchedOutline:classes.noBorder}
+                                      }}
+                                      variant="outlined"
+                                      onBlur={() => {
+                                        if (!medid || medid === '') setErrMessageForMedId('MedId is required')
+                                        else setErrMessageForMedId('')
+                                      }}
+                                      onKeyUp={() => {
+                                        if (!medid || medid === '') setErrMessageForMedId('MedId is required')
+                                        else setErrMessageForMedId('')
+                                      }}
+                                      onChange={(e) => {
+                                        setMedId(e.target.value); }}
+                                  />
+                              </div>
+
+                              {/* Birth Date */}
+                              {/* <div className="d-flex mt-3">
+                                  <RedditTextField
+                                      id="birthdate2"
+                                      label=""
+                                      placeholder="BirthDate"
+                                      value={birthdate}
+                                      helperText={errMessageForBirthDate && errMessageForBirthDate !== '' ? errMessageForBirthDate : '' }
+                                      error={errMessageForBirthDate && errMessageForBirthDate !== ''}
+                                      InputLabelProps={{
+                                          shrink: true,
+                                      }}
+                                      onKeyDown={handleEnterKeyDown}
+                                      fullWidth
+                                      InputProps={{
+                                        startAdornment: (
+                                          <InputAdornment position="start">
+                                            <CImg src={'../img/user.png'} style={{width: '27px'}} />
+                                          </InputAdornment>
+                                        ),
+                                        classes:{notchedOutline:classes.noBorder}
+                                      }}
+                                      variant="outlined"
+                                      onBlur={() => {
+                                        if (!birthdate || birthdate === '') setErrMessageForBirthDate('BirthDate is required')
+                                        else setErrMessageForBirthDate('')
+                                      }}
+                                      onKeyUp={() => {
+                                        if (!birthdate || birthdate === '') setErrMessageForBirthDate('BirthDate is required')
+                                        else setErrMessageForBirthDate('')
+                                      }}
+                                      onChange={(e) => {
+                                        setBirthDate(e.target.value); }}
+                                  >
+
+                                  </RedditTextField>
+
+
+                              </div> */}
+
+                              <div className="d-flex mt-3">
+
+                                <div class="MuiInputBase-root MuiOutlinedInput-root Mui-error Mui-error MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart MuiOutlinedInput-adornedStart">
+                                  <div class="MuiInputAdornment-root MuiInputAdornment-positionStart"><img class="" src={'../img/user.png'} style={{width: '27px'}} /></div>
+                                  <DatePicker
+                                    id="birthdate"
+                                    selected={birthdate}
+                                    popperPlacement="top-end"
+                                    dateFormat="dd/MM/yyyy"
+                                    onChange={(date) => {setBirthDate(date); }}
+                                    style={{
+                                      backgroundColor: 'red'
+                                    }}
+                                    placeholderText="Birth date"
+                                  />
+                                  <fieldset aria-hidden="true" class="PrivateNotchedOutline-root-4 MuiOutlinedInput-notchedOutline makeStyles-noBorder-1" style={{paddingLeft: '8px'}}>
+                                  <legend class="PrivateNotchedOutline-legend-5" style={{width: '0.01px'}}><span>​</span></legend></fieldset>
+                                </div>
+
+                              </div>
+
+
+                            </>
+                          )
+                        }
+
                         {/* <div className="d-flex mt-2">
                           <h5 className="text-left signin-header-desc">By signing in or creating an account. you agree with our <span className="span-underline" onClick={() => {
                             history.push('/terms');  dispatch({type: 'set', openSignin: false}); dispatch({type: 'set', openSignup: false})}}
@@ -330,7 +492,7 @@ const Signup = () => {
                               SIGN UP
                             </CButton>
                         </div>
-                  </div>        
+                  </div>
                 </CCardBody>
               </CCard>
             </CCardGroup>

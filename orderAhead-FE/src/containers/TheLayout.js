@@ -7,7 +7,9 @@ import {
   TheHeader,
 } from './index'
 
-const TheLayout = () => {
+import ThemeProvider from '../contexts/ThemeContext'
+
+const TheLayout = (props) => {
   const darkMode = useSelector(state => state.darkMode)
   const classes = classNames(
     'c-app c-default-layout',
@@ -15,16 +17,18 @@ const TheLayout = () => {
   )
 
   return (
-    <div className={classes}>
-      <TheHeader/>
-      <div className="c-wrapper">
-        {/* <TheSidebar/> */}
-        <div className="c-body">
-          <TheContent/>
+    <ThemeProvider>
+      <div className={classes}>
+        <TheHeader/>
+        <div className="c-wrapper" style={{backgroundColor: 'white'}}>
+          {/* <TheSidebar/> */}
+          <div className="c-body">
+            <TheContent/>
+          </div>
+          <TheFooter/>
         </div>
-        <TheFooter/>
       </div>
-    </div>
+    </ThemeProvider>
   )
 }
 
